@@ -1,0 +1,40 @@
+e return [double eVal]:
+     t e' [$_t_1.tVal] { res.eVal = $_e'_2.sumVal; };
+e' [double i] return [double sumVal] :
+    PLUS t e' [i + $_t_2.tVal] {res.sumVal = $_e'_3.sumVal;} | EPS {res.sumVal = i;} |
+    MINUS t e' [i - $_t_2.tVal] {res.sumVal = $_e'_3.sumVal;} | EPS {res.sumVal = i;};
+
+
+t return [double tVal]:
+    f t' [$_f_1.fVal] { res.tVal = $_t'_2.mulVal; };
+
+t' [double i] return [double mulVal]:
+    MUL f t' [i * $_f_2.fVal] {res.mulVal = $_t'_3.mulVal;} | EPS {res.mulVal = i;} |
+    DIV f t' [i / $_f_2.fVal] {res.mulVal = $_t'_3.mulVal;} | EPS {res.mulVal = i;} |
+    POW t {res.mulVal = Math.pow(i, $_2.tVal);};
+
+
+f return [double fVal]:
+    number {res.fVal = $_1.number;}
+    | OPEN_BRACKET e {res.fVal = $_e_2.eVal;} CLOSE_BRACKET;
+
+fractional return [String fractional]:   DOT NUMBER {res.fractional = $_1.value + $_2.value;}
+                                       | EPS {res.fractional = "";};
+integral return [String integral]: NUMBER {res.integral = $_1.value;};
+
+number return [double number]:
+    integral fractional
+    {
+      res.number = Double.parseDouble($_1.integral + $_2.fractional);
+    };
+
+
+OPEN_BRACKET: '\(';
+CLOSE_BRACKET: '\)';
+MUL: '\*';
+PLUS: '\+';
+DIV: '\/';
+MINUS: '\-';
+DOT: '\.';
+NUMBER: '[0-9]+';
+POW: '\^';

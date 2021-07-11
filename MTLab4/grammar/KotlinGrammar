@@ -1,0 +1,18 @@
+function : FUN body;
+body     : NAME arguments1 returnType;
+
+arguments1 : OB arguments2 CB ;
+arguments2 : argument arguments3 | EPS;
+arguments3 : COMMA argument arguments3 | EPS;
+argument   : NAME LDOTS type;
+returnType : LDOTS type | EPS;
+type       : SIMPLE_TYPE;
+
+FUN          : 'fun';
+SIMPLE_TYPE  : '[A-Z](\w|\d|_)*';
+NAME         : '((_+(\w|\d))|\w)(\w|\d|_)*';
+
+LDOTS : ':';
+OB    : '\(';
+CB    : '\)';
+COMMA : ',';

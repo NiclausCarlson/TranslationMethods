@@ -1,0 +1,31 @@
+`FUNCTION`  ::= fun `BODY`
+`BODY`      ::= `NAME` `ARGUMENTS_1` `RETURN_TYPE`
+
+`ARGUMENTS_1` ::= '('`ARGUMENTS_2`')'
+`ARGUMENTS_2` ::= `ARGUMENT` `ARGUMENTS_3` | eps
+`ARGUMENTS_3` ::= ,`ARGUMENT` `ARGUMENTS_3` | eps
+`ARGUMENT`    ::= `NAME`: `TYPE`
+`RETURN_TYPE` ::= :`TYPE` | eps
+
+`NAME`         ::= (_+(\w|\d)|\w) (\w|\d|_)*
+'TYPE'         ::= 'SIMPLE_TYPE' 'GENERIC'
+'GENERIC'      ::= <'SIMPLE_TYPE'> | eps
+`SIMPLE_TYPE`  ::= [A-Z](\w|\d|_)*
+
+-----------------------------------------------------------------------------------------------
+       +-------------+-----------------+---------------------------+
+       |    RULE     |    FIRST        |          FOLLOW           |
+       +-------------+-----------------+---------------------------+
+       | FUNCTION    | {fun}           | {}                        |
+       | BODY        | {_,\w}          | {}                        |
+       | NAME        | {_,\w}          | {(,:}                     |
+       | ARGUMENTS_1 | {(}             | {:}                       |
+       | ARGUMENTS_2 | {eps | _ | \w}  | {)}                       |
+       | ARGUMENTS_3 | {, | eps}       | {)}                       |
+       | ARGUMENT    | {_ | \w}        | {, | )}                   |
+       | TYPE        | {[A-Z]}         | {}                        |
+       | GENERIC     | {< | eps}       | {}                        |
+       | RETURN_TYPE | {eps | :}       | {}                        |
+       | SIMPLE_TYPE | {[A-Z]}         | {, | ) | >}               |
+       +-------------+--------------+------------------------------+
+
